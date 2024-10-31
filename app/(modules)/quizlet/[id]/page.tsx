@@ -14,7 +14,13 @@ interface Question {
     answers: Answer[];
 }
 
+let quizCache: { [key: string]: any } = {};
+
 const fetchQuizData = async (quizId: number) => {
+    if (quizCache[quizId]) {
+        return quizCache[quizId];
+    }
+
     const quiz = await prisma.quiz.findUnique({
         where: { id: quizId },
         include: {
@@ -44,6 +50,7 @@ const fetchQuizData = async (quizId: number) => {
         })),
     };
 
+    quizCache[quizId] = formattedQuiz; // Cache the result
     return formattedQuiz;
 };
 
@@ -61,8 +68,11 @@ const QuizletPage = async ({ params }: { params: { id: string } }) => {
         </div>
     );
 };
+
 export async function generateMetadata({ params }: { params: { id: string } }) {
-    return { title: `Quizlet - ${params.id}` };
+    const quizId = parseInt(params.id);
+    const quiz = await fetchQuizData(quizId);
+    return { title: `Quizlet - ${quiz?.title || "Loading..."}` };
 }
 
 export default QuizletPage;
