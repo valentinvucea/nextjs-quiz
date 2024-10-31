@@ -1,6 +1,6 @@
 // app/quiz/[id]/page.tsx
-import prisma from "../../../lib/prisma";
-import ClientQuizlet from "../../../components/ClientQuizlet";
+import prisma from "../../../../lib/prisma";
+import ClientQuizlet from "../../../../components/ClientQuizlet";
 
 interface Answer {
     id: number;

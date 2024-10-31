@@ -1,4 +1,4 @@
-import prisma from "../../../lib/prisma";
+import prisma from "../../../../lib/prisma";
 
 interface Answer {
     id: number;
@@ -30,7 +30,7 @@ const fetchQuizData = async (quizId: number) => {
     return quiz;
 };
 
-const QuizPage = async ({ params }: { params: { id: string } }) => {
+const QuizViewPage = async ({ params }: { params: { id: string } }) => {
     const quizId = parseInt(params.id);
     const quiz = await fetchQuizData(quizId);
 
@@ -60,4 +60,4 @@ const QuizPage = async ({ params }: { params: { id: string } }) => {
     );
 };
 
-export default QuizPage;
+export default QuizViewPage;
