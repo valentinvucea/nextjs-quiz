@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "target": "es2020", // Adjust the target as needed
+        "module": "commonjs",
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "strict": true,
+        "noImplicitAny": true,
+        "skipLibCheck": true
+    }
+}

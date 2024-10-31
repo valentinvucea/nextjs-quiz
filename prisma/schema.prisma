@@ -36,18 +36,26 @@ model Quiz {
   title       String
   categoryId  Int
   active      Boolean @default(true)
-  questions   Question[]
-  results Result[]
+  questions   QuizQuestion[]
+  results     Result[]
   @@map("quiz")
 }
 
 model Question {
   id      Int       @id @default(autoincrement()) 
   text    String 
-  quizId  Int 
-  quiz    Quiz      @relation(fields: [quizId], references: [id]) 
+  quizzes QuizQuestion[]  
   answers Answer[]
   @@map("question")  
+}
+
+model QuizQuestion {
+  quizId      Int 
+  questionId  Int 
+  Quiz        Quiz @relation(fields: [quizId], references: [id]) 
+  Question    Question @relation(fields: [questionId], references: [id]) 
+  @@id([quizId, questionId]) 
+  @@map("quiz_question")  
 }
 
 model Answer {
