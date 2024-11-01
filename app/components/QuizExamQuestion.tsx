@@ -1,11 +1,11 @@
 "use client"; // This marks the component as client-side
-
 import { useState } from "react";
+import QuizExamResults from "./QuizExamResults";
 
 interface Answer {
     id: number;
     text: string;
-    isCorrect: Boolean;
+    isCorrect: boolean;
 }
 
 interface Question {
@@ -18,8 +18,8 @@ interface QuizQuestionProps {
     questions: Question[];
 }
 
-const QuizQuestion = ({ questions }: QuizQuestionProps) => {
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
     const [submittedAnswers, setSubmittedAnswers] = useState<number[][]>([]);
     const [results, setResults] = useState<{
@@ -39,7 +39,6 @@ const QuizQuestion = ({ questions }: QuizQuestionProps) => {
 
     const handleSubmit = () => {
         setSubmittedAnswers((prev) => [...prev, selectedAnswers]);
-        setSelectedAnswers([]);
     };
 
     const handleNextQuestion = () => {
@@ -69,24 +68,26 @@ const QuizQuestion = ({ questions }: QuizQuestionProps) => {
                 total: questions.length,
             });
         }
+        setSelectedAnswers([]); // Reset selected answers for the next question
     };
 
     if (results) {
         return (
-            <div>
-                <h2>Results</h2>
-                <p>Correct Answers: {results.correct}</p>
-                <p>Total Questions: {results.total}</p>
-            </div>
-        );
+            <QuizExamResults
+                correct={results.correct}
+                total={results.total}
+                questions={questions}
+                submittedAnswers={submittedAnswers}
+            />
+        ); // Use the new component
     }
 
     return (
         <div className="relative my-4 p-4 border rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold">
+            <h2 className="text-lg font-semibold mb-5">
                 {currentQuestionIndex + 1}. {currentQuestion.text}
             </h2>
-            <ul className="list-none ml-4">
+            <ul className="list-none ml-4 mb-3">
                 {currentQuestion.answers.map((answer) => (
                     <li key={answer.id} className="mt-2 text-left">
                         <label>
@@ -109,14 +110,22 @@ const QuizQuestion = ({ questions }: QuizQuestionProps) => {
             <button
                 onClick={handleSubmit}
                 disabled={submittedAnswers.length > currentQuestionIndex}
-                className="mt-4 p-2 bg-blue-500 text-white rounded"
+                className={`mt-4 p-2 text-white rounded ${
+                    submittedAnswers.length > currentQuestionIndex
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : "bg-blue-500"
+                } hover:bg-blue-700`}
             >
                 Submit Answer
             </button>
             <button
                 onClick={handleNextQuestion}
                 disabled={submittedAnswers.length <= currentQuestionIndex}
-                className="mt-4 ml-4 p-2 bg-green-500 text-white rounded"
+                className={`mt-4 ml-4 p-2 text-white rounded ${
+                    submittedAnswers.length <= currentQuestionIndex
+                        ? "bg-gray-500 cursor-not-allowed"
+                        : "bg-green-500"
+                } hover:bg-green-700`}
             >
                 Next Question
             </button>
@@ -141,4 +150,4 @@ const saveResultsToDatabase = async (results: {
     }
 };
 
-export default QuizQuestion;
+export default QuizExamQuestion;

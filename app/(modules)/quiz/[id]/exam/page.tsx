@@ -1,5 +1,5 @@
 import prisma from "../../../../lib/prisma";
-import QuizQuestion from "../../../../components/QuizExamQuestion";
+import QuizExamQuestion from "../../../../components/QuizExamQuestion";
 
 interface Answer {
     id: number;
@@ -61,7 +61,7 @@ const QuizExamPage = async ({ params }: { params: { id: string } }) => {
         <div className="flex justify-center mt-8">
             <div className="max-w-4xl w-full p-3 bg-white rounded-lg">
                 <h1 className="text-2xl font-bold mb-6">{quiz?.title}</h1>
-                <QuizQuestion questions={quiz?.questions || []} />
+                <QuizExamQuestion questions={quiz?.questions || []} />
             </div>
         </div>
     );
