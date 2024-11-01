@@ -1,6 +1,7 @@
 "use client"; // This marks the component as client-side
 import { useRef, useState } from "react";
 import QuizExamResults from "./QuizExamResults";
+import { saveQuizExamResultsToDb } from "../lib/saveResults";
 
 interface Answer {
     id: number;
@@ -99,11 +100,12 @@ const QuizExamQuestion = ({ questions, quizId }: QuizQuestionProps) => {
                 total: questions.length,
             });
 
-            saveResultsToDatabase({
+            saveQuizExamResultsToDb({
                 quizId,
                 startTime: startTimeRef.current.toISOString(),
                 totalTime,
-                finalScore: correctAnswersCount,
+                correctAnswersCount,
+                totalQuestions: questions.length,
                 incorrectAnswers,
             });
         }
@@ -171,28 +173,6 @@ const QuizExamQuestion = ({ questions, quizId }: QuizQuestionProps) => {
             </button>
         </div>
     );
-};
-
-const saveResultsToDatabase = async (results: {
-    quizId: number;
-    startTime: string;
-    totalTime: number;
-    finalScore: number;
-    incorrectAnswers: {
-        questionId: number;
-        correctAnswerIds: number[];
-        userAnswerIds: number[];
-    }[];
-}) => {
-    try {
-        await fetch("/api/saveResults", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(results),
-        });
-    } catch (error) {
-        console.error("Error saving results:", error);
-    }
 };
 
 export default QuizExamQuestion;

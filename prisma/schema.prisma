@@ -68,13 +68,15 @@ model Answer {
 }
 
 model Result {
-  id          Int @id @default(autoincrement()) 
-  score       Int 
-  userId      Int 
-  user        User @relation(fields: [userId], references: [id]) 
-  quizId      Int 
-  quiz        Quiz @relation(fields: [quizId], references: [id]) 
-  answers     Json 
-  createdAt DateTime @default(now())
+  id                Int @id @default(autoincrement())
+  userId            Int
+  quizId            Int
+  score             Int
+  questionsCount    Int
+  incorrectAnswers  Json
+  startedAt         DateTime @default(now())
+  duration          Int
+  quiz              Quiz @relation(fields: [quizId], references: [id]) 
+  user              User @relation(fields: [userId], references: [id]) 
   @@map("result") 
 }
