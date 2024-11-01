@@ -1,5 +1,5 @@
 "use client"; // This marks the component as client-side
-import { useState } from "react";
+import { useRef, useState } from "react";
 import QuizExamResults from "./QuizExamResults";
 
 interface Answer {
@@ -16,9 +16,10 @@ interface Question {
 
 interface QuizQuestionProps {
     questions: Question[];
+    quizId: number;
 }
 
-const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
+const QuizExamQuestion = ({ questions, quizId }: QuizQuestionProps) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
     const [submittedAnswers, setSubmittedAnswers] = useState<number[][]>([]);
@@ -26,6 +27,9 @@ const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
         correct: number;
         total: number;
     } | null>(null);
+
+    // Capture start time when the component initializes
+    const startTimeRef = useRef(new Date());
 
     const currentQuestion = questions[currentQuestionIndex];
 
@@ -45,6 +49,11 @@ const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
         if (currentQuestionIndex < questions.length - 1) {
             setCurrentQuestionIndex(currentQuestionIndex + 1);
         } else {
+            const endTime = new Date();
+            const totalTime = Math.round(
+                (endTime.getTime() - startTimeRef.current.getTime()) / 1000,
+            );
+
             const correctAnswersCount = submittedAnswers.reduce(
                 (acc, answers, index) =>
                     acc +
@@ -59,16 +68,47 @@ const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
                         : 0),
                 0,
             );
+
+            const incorrectAnswers = questions.reduce(
+                (acc, question, index) => {
+                    const userAnswers = submittedAnswers[index];
+                    const correctAnswers = question.answers
+                        .filter((a) => a.isCorrect)
+                        .map((a) => a.id);
+                    if (
+                        JSON.stringify(userAnswers.sort()) !==
+                        JSON.stringify(correctAnswers.sort())
+                    ) {
+                        acc.push({
+                            questionId: question.id,
+                            correctAnswerIds: correctAnswers,
+                            userAnswerIds: userAnswers,
+                        });
+                    }
+                    return acc;
+                },
+                [] as {
+                    questionId: number;
+                    correctAnswerIds: number[];
+                    userAnswerIds: number[];
+                }[],
+            );
+
             setResults({
                 correct: correctAnswersCount,
                 total: questions.length,
             });
+
             saveResultsToDatabase({
-                correct: correctAnswersCount,
-                total: questions.length,
+                quizId,
+                startTime: startTimeRef.current.toISOString(),
+                totalTime,
+                finalScore: correctAnswersCount,
+                incorrectAnswers,
             });
         }
-        setSelectedAnswers([]); // Reset selected answers for the next question
+
+        setSelectedAnswers([]);
     };
 
     if (results) {
@@ -79,7 +119,7 @@ const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
                 questions={questions}
                 submittedAnswers={submittedAnswers}
             />
-        ); // Use the new component
+        );
     }
 
     return (
@@ -134,15 +174,20 @@ const QuizExamQuestion = ({ questions }: QuizQuestionProps) => {
 };
 
 const saveResultsToDatabase = async (results: {
-    correct: number;
-    total: number;
+    quizId: number;
+    startTime: string;
+    totalTime: number;
+    finalScore: number;
+    incorrectAnswers: {
+        questionId: number;
+        correctAnswerIds: number[];
+        userAnswerIds: number[];
+    }[];
 }) => {
     try {
         await fetch("/api/saveResults", {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(results),
         });
     } catch (error) {

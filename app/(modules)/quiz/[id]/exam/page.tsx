@@ -61,7 +61,10 @@ const QuizExamPage = async ({ params }: { params: { id: string } }) => {
         <div className="flex justify-center mt-8">
             <div className="max-w-4xl w-full p-3 bg-white rounded-lg">
                 <h1 className="text-2xl font-bold mb-6">{quiz?.title}</h1>
-                <QuizExamQuestion questions={quiz?.questions || []} />
+                <QuizExamQuestion
+                    questions={quiz?.questions || []}
+                    quizId={quiz?.id || 0}
+                />
             </div>
         </div>
     );
