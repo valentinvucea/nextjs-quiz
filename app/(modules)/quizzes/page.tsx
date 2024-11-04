@@ -1,6 +1,11 @@
 import { categoryMap } from "@/app/lib/constants";
 import { fetchQuizzesData } from "../../lib/fetchQuizzesData";
 import Link from "next/link";
+import {
+    BookOpenIcon,
+    EyeIcon,
+    ClipboardDocumentListIcon,
+} from "@heroicons/react/24/outline";
 
 const QuizzesPage = async ({
     searchParams,
@@ -47,45 +52,26 @@ const QuizzesPage = async ({
                                 </span>
                             </td>
                             <td className="border p-2 text-center">
-                                <Link href={`/quiz/${quiz.id}/exam`} passHref>
-                                    <svg
-                                        className="inline-block w-5 h-5 mr-2 cursor-pointer"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <title>Take Quiz</title>
-                                        <path d="M2 5a2 2 0 012-2h12a2 2 0 012 2v10a2 2 0 01-2 2H4a2 2 0 01-2-2V5z" />
-                                    </svg>
-                                </Link>
-                                <Link href={`/quiz/${quiz.id}/view`} passHref>
-                                    <svg
-                                        className="inline-block w-5 h-5 mr-2 cursor-pointer"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <title>View Quiz</title>
-                                        <path
-                                            fillRule="evenodd"
-                                            d="M10 2a8 8 0 100 16 8 8 0 000-16zm-2 8a2 2 0 114 0 2 2 0 01-4 0zm10 0a10 10 0 11-20 0 10 10 0 0120 0z"
-                                            clipRule="evenodd"
-                                        />
-                                    </svg>
-                                </Link>
                                 <Link
-                                    href={`/quiz/${quiz.id}/quizzlet`}
+                                    href={`/quiz/${quiz.id}/exam`}
                                     passHref
+                                    title="Take Quiz"
                                 >
-                                    <svg
-                                        className="inline-block w-5 h-5 mr-2 cursor-pointer"
-                                        fill="currentColor"
-                                        viewBox="0 0 20 20"
-                                        xmlns="http://www.w3.org/2000/svg"
-                                    >
-                                        <title>Quizzlet</title>
-                                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 4a4 4 0 110 8 4 4 0 010-8z" />
-                                    </svg>
+                                    <BookOpenIcon className="inline-block w-5 h-5 mr-2 text-blue-500 cursor-pointer" />{" "}
+                                </Link>{" "}
+                                <Link
+                                    href={`/quiz/${quiz.id}/view`}
+                                    passHref
+                                    title="View Quiz"
+                                >
+                                    <EyeIcon className="inline-block w-5 h-5 mr-2 text-blue-500 cursor-pointer" />{" "}
+                                </Link>{" "}
+                                <Link
+                                    href={`/quiz/${quiz.id}/quizlet`}
+                                    passHref
+                                    title="Quizzlet"
+                                >
+                                    <ClipboardDocumentListIcon className="inline-block w-5 h-5 mr-2 text-blue-500 cursor-pointer" />{" "}
                                 </Link>
                             </td>
                         </tr>

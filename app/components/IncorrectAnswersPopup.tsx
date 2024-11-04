@@ -66,7 +66,8 @@ const IncorrectAnswersPopup = ({ result }: QuizAnswersPopupProps) => {
                                 }`}
                             >
                                 {" "}
-                                Score: {result.score}{" "}
+                                Score: {result.score}
+                                {"% "}
                                 {isPass ? "(PASS)" : "(FAIL)"}{" "}
                             </div>
                         </div>

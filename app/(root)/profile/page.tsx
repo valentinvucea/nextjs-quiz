@@ -18,19 +18,36 @@ const ProfilePage = async () => {
                 <thead>
                     <tr>
                         <th className="border p-2 text-left">Quiz</th>
+                        <th className="border p-2 text-center">Questions #</th>
                         <th className="border p-2 text-center">Score</th>
                         <th className="border p-2 text-left">Date Taken</th>
+                        <th className="border p-2 text-left">Duration</th>
                         <th className="border p-2 text-left">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
                     {userProfile.results.map((result) => {
                         const isPass = result.score >= result.quiz.passScore;
+                        const startedAt = new Date(result.startedAt);
+                        const dateOptions: Intl.DateTimeFormatOptions = {
+                            year: "numeric",
+                            month: "2-digit",
+                            day: "2-digit",
+                            hour: "numeric",
+                            minute: "2-digit",
+                            hour12: true,
+                        };
+                        const formattedDuration = `${Math.floor(
+                            result.duration / 60,
+                        )} min ${result.duration % 60} sec`;
 
                         return (
                             <tr key={result.id}>
                                 <td className="border p-2">
                                     {result.quiz.title}
+                                </td>
+                                <td className="border p-2 text-center">
+                                    {result.questionsCount}
                                 </td>
                                 <td className="border p-2 text-center">
                                     <span
@@ -41,14 +58,19 @@ const ProfilePage = async () => {
                                         }`}
                                     >
                                         {" "}
-                                        {result.score}{" "}
+                                        {result.score}
+                                        {"% "}
                                         {isPass ? "(PASS)" : "(FAIL)"}{" "}
                                     </span>
                                 </td>
                                 <td className="border p-2">
-                                    {new Date(
-                                        result.startedAt,
-                                    ).toLocaleDateString()}
+                                    {startedAt.toLocaleString(
+                                        "en-US",
+                                        dateOptions,
+                                    )}
+                                </td>
+                                <td className="border p-2">
+                                    {formattedDuration}
                                 </td>
                                 <td className="border p-2">
                                     <Link
