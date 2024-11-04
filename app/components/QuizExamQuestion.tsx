@@ -18,15 +18,21 @@ interface Question {
 interface QuizQuestionProps {
     questions: Question[];
     quizId: number;
+    passScore: number;
 }
 
-const QuizExamQuestion = ({ questions, quizId }: QuizQuestionProps) => {
+const QuizExamQuestion = ({
+    questions,
+    quizId,
+    passScore,
+}: QuizQuestionProps) => {
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState<number>(0);
     const [selectedAnswers, setSelectedAnswers] = useState<number[]>([]);
     const [submittedAnswers, setSubmittedAnswers] = useState<number[][]>([]);
     const [results, setResults] = useState<{
         correct: number;
         total: number;
+        passScore: number;
     } | null>(null);
 
     // Capture start time when the component initializes
@@ -98,6 +104,7 @@ const QuizExamQuestion = ({ questions, quizId }: QuizQuestionProps) => {
             setResults({
                 correct: correctAnswersCount,
                 total: questions.length,
+                passScore: passScore,
             });
 
             saveQuizExamResultsToDb({
@@ -118,6 +125,7 @@ const QuizExamQuestion = ({ questions, quizId }: QuizQuestionProps) => {
             <QuizExamResults
                 correct={results.correct}
                 total={results.total}
+                passScore={results.passScore}
                 questions={questions}
                 submittedAnswers={submittedAnswers}
             />
