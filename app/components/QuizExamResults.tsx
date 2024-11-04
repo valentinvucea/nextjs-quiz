@@ -4,6 +4,7 @@ import { useState } from "react";
 interface QuizResultsProps {
     correct: number;
     total: number;
+    passScore: number;
     questions: Question[];
     submittedAnswers: number[][];
 }
@@ -23,12 +24,13 @@ interface Question {
 const QuizResults = ({
     correct,
     total,
+    passScore,
     questions,
     submittedAnswers,
 }: QuizResultsProps) => {
     const [showIncorrect, setShowIncorrect] = useState(false);
     const percentage = (correct / total) * 100;
-    const passFail = percentage >= 80 ? "PASS" : "FAIL";
+    const passFail = percentage >= passScore ? "PASS" : "FAIL";
 
     const handleToggle = () => {
         setShowIncorrect((prev) => !prev);

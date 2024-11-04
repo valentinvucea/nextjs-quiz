@@ -64,6 +64,7 @@ const QuizExamPage = async ({ params }: { params: { id: string } }) => {
                 <QuizExamQuestion
                     questions={quiz?.questions || []}
                     quizId={quiz?.id || 0}
+                    passScore={quiz?.passScore || 80}
                 />
             </div>
         </div>

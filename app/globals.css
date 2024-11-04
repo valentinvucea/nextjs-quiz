@@ -14,6 +14,14 @@
   }
 }
 
+.h-128 {
+  height: 32rem;
+}
+
+.w-50 {
+  width: 50%;
+}
+
 body {
   color: var(--foreground);
   background: var(--background);
