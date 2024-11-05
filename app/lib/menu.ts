@@ -4,7 +4,7 @@ export const Menu = [
         title: "Profile",
         submenu: [
             { title: "Info", url: "/profile/info" },
-            { title: "Results", url: "/profile/results" },
+            { title: "Results", url: "/profile" },
         ],
     },
     {
