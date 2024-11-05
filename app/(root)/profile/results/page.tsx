@@ -1,19 +1,17 @@
-import { fetchUserProfileData } from "../../lib/fetchUserProfileData";
+import { fetchUserProfileData } from "../../../lib/fetchUserProfileData";
 import Link from "next/link";
-import IncorrectAnswersPopup from "../../components/IncorrectAnswersPopup";
+import IncorrectAnswersPopup from "../../../components/IncorrectAnswersPopup";
 
-const ProfilePage = async () => {
+const ProfileResultsPage = async () => {
     const userId = 1; // Replace with actual user ID logic
     const userProfile = await fetchUserProfileData(userId);
 
     return (
         <div className="p-6">
-            <h1 className="text-3xl font-bold mb-6">Profile</h1>
-            <div className="bg-white p-4 rounded-lg shadow-md mb-4">
-                <h2 className="text-2xl font-semibold">{userProfile.name}</h2>
-                <p className="text-gray-600">{userProfile.email}</p>
-            </div>
-            <h2 className="text-2xl font-bold mb-4">Quiz Results</h2>
+            <h1 className="text-3xl font-bold mb-6">
+                Results for {userProfile.name}
+            </h1>
+
             <table className="w-full border-collapse">
                 <thead>
                     <tr>
@@ -90,4 +88,4 @@ const ProfilePage = async () => {
     );
 };
 
-export default ProfilePage;
+export default ProfileResultsPage;
