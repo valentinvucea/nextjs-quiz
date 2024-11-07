@@ -23,9 +23,17 @@ interface UserProfile {
     name: string | null;
     active: boolean;
     results: Result[];
+    totalResults: number;
+    currentPage: number;
+    totalPages: number;
 }
 
-export const fetchUserProfileData = async (userId: number) => {
+const pageSize = 10;
+
+export const fetchUserProfileData = async (
+    userId: number,
+    page: number = 1,
+) => {
     const user = await prisma.user.findUnique({
         where: { id: userId },
         include: {
@@ -33,6 +41,9 @@ export const fetchUserProfileData = async (userId: number) => {
                 include: {
                     quiz: true,
                 },
+                orderBy: { startedAt: "desc" },
+                skip: (page - 1) * pageSize,
+                take: pageSize,
             },
         },
     });
@@ -40,6 +51,11 @@ export const fetchUserProfileData = async (userId: number) => {
     if (!user) {
         throw new Error("User not found");
     }
+
+    const totalResults = await prisma.result.count({
+        where: { userId: userId },
+    });
+    const totalPages = Math.ceil(totalResults / pageSize);
 
     return {
         id: user.id,
@@ -60,5 +76,8 @@ export const fetchUserProfileData = async (userId: number) => {
                 active: result.quiz.active,
             },
         })),
+        totalResults: totalResults,
+        currentPage: page,
+        totalPages: totalPages,
     };
 };
