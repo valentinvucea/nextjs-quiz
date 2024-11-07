@@ -1,10 +1,17 @@
 import { fetchUserProfileData } from "../../../lib/fetchUserProfileData";
 import Link from "next/link";
 import IncorrectAnswersPopup from "../../../components/IncorrectAnswersPopup";
+import Pagination from "@/app/components/shared/Pagination";
 
-const ProfileResultsPage = async () => {
+const ProfileResultsPage = async ({
+    searchParams,
+}: {
+    searchParams: { page?: string };
+}) => {
     const userId = 1; // Replace with actual user ID logic
-    const userProfile = await fetchUserProfileData(userId);
+    const page = searchParams.page ? parseInt(searchParams.page) : 1;
+
+    const userProfile = await fetchUserProfileData(userId, page);
 
     return (
         <div className="p-6">
@@ -84,6 +91,10 @@ const ProfileResultsPage = async () => {
                     })}
                 </tbody>
             </table>
+            <Pagination
+                currentPage={userProfile.currentPage}
+                totalPages={userProfile.totalPages}
+            />
         </div>
     );
 };
