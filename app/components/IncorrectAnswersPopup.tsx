@@ -44,7 +44,7 @@ const IncorrectAnswersPopup = ({ result }: QuizAnswersPopupProps) => {
             </button>
             {isOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-start mt-8">
-                    <div className="relative bg-white p-6 rounded-lg shadow-lg w-50 h-128 overflow-y-auto">
+                    <div className="relative bg-white p-6 rounded-lg shadow-lg w-1/2 h-128 overflow-y-auto">
                         <h2 className="text-xl font-bold mb-4">
                             Quiz: {result.quiz.title}
                         </h2>

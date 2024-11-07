@@ -18,8 +18,12 @@
   height: 32rem;
 }
 
-.w-50 {
-  width: 50%;
+.w-96 {
+  width: 24rem;
+}
+
+.w-128 {
+  width: 32rem;
 }
 
 body {
