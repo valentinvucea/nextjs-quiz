@@ -13,6 +13,7 @@ export const fetchQuizzesData = async (page: number = 1) => {
                 },
             },
         },
+        orderBy: { id: "desc" },
     });
 
     const totalQuizzes = await prisma.quiz.count();
