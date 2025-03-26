@@ -4,6 +4,7 @@
     "private": true,
     "scripts": {
         "extract": "node -r esm -r ts-node/register scripts/extractFromMd.ts",
+        "populate": "node -r esm -r ts-node/register scripts/populateKnowledgeCgeckQuestions.ts",
         "dev": "next dev --turbopack",
         "build": "next build",
         "start": "next start",
@@ -20,7 +21,7 @@
     "dependencies": {
         "@heroicons/react": "^2.1.5",
         "@prisma/client": "^5.21.1",
-        "next": "15.0.2",
+        "next": "^15.2.4",
         "react": "19.0.0-rc-02c0e824-20241028",
         "react-dom": "19.0.0-rc-02c0e824-20241028"
     },
